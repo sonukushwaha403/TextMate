@@ -14,4 +14,3 @@ router.route("/testingauthMiddleware").get(trimRequest.all,(req,res)=>{
 
 export default router;
 
- 
