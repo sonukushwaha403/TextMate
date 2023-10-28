@@ -66,6 +66,23 @@ export const getConversationMessages = createAsyncThunk(
     }
   }
 );
+
+// export const sendMessage = createAsyncThunk(
+//   "conervsation/messages",
+//   async (values, { rejectWithValue }) => {
+//     const { token, convo_id } = values;
+//     try {
+//       const { data } = await axios.get(`${MESSAGE_ENDPOINT}/${convo_id}`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+//       return data;
+//     } catch (error) {
+//       return rejectWithValue(error.response.data.error.message);
+//     }
+//   }
+// );
 export const sendMessage = createAsyncThunk(
   "message/send",
   async (values, { rejectWithValue }) => {

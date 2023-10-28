@@ -1,7 +1,8 @@
 // import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import Peer from "simple-peer";
-// import { ChatContainer, WhatsappHome } from "../components/Chat";
+// import { ChatContainer, TextMateHome } from "../components/Chat";
+import { ChatContainer, TextMateHome } from "../components/Chat/welcome";
 import { Sidebar } from "../components/sidebar";
 import { useEffect } from "react";
 // import SocketContext from "../context/SocketContext";
@@ -19,7 +20,8 @@ import {
 export default function Home() {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.user);
-//   const { activeConversation } = useSelector((state) => state.chat);
+    const { activeConversation } = useSelector((state) => state.chat);
+    console.log("activeConversation",activeConversation);
 //   const [onlineUsers, setOnlineUsers] = useState([]);
 
     //get conversations
@@ -30,11 +32,15 @@ export default function Home() {
     },[user]);
 
   return (
-    <div className=" h-screen bg-dark_bg_1 flex items-center justify-center py-[19px] overflow-hidden">
+    <div className=" h-screen bg-dark_bg_1 flex items-center justify-center overflow-hidden">
       {/*container*/}
-      <div className="container  h-screen flex">
+      <div className="container  h-screen pt-[19px] flex">
         {/*Sidebar*/}
         <Sidebar />
+          {
+            activeConversation._id?<ChatContainer/>:
+            <TextMateHome/>
+          }
       </div>
     </div>
   );
@@ -198,7 +204,7 @@ export default function Home() {
 //               typing={typing}
 //             />
 //           ) : (
-//             <WhatsappHome />
+//             <TextMateHome />
 //           )}
 //         </div>
 //       </div>

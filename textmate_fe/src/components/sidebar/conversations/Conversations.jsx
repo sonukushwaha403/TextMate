@@ -1,9 +1,10 @@
 
 import { useSelector } from "react-redux";
+import { setActiveConversation } from "../../../features/chatSlice";
 import Conversation from "./Conversation";
 
 export default function Conversations() {
-  const { conversations } = useSelector(
+  const { conversations,activeConversation } = useSelector(
     (state) => state.chat
   );
   const { user } = useSelector((state) => state.user);
@@ -11,7 +12,9 @@ export default function Conversations() {
     <div className="convos scrollbar">
       <ul>
         {conversations &&
-          conversations.map((convo) => (
+          conversations
+          .filter((c)=>c.latestMessage || c._id===activeConversation._id)
+          .map((convo) => (
     
                 <Conversation
                   convo={convo}
