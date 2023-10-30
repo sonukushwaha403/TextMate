@@ -15,7 +15,9 @@ import Register from "./pages/register";
 //socket io
 const socket = io(process.env.REACT_APP_API_ENDPOINT.split("/api/v1")[0]);
 
+
 function App() {
+  
   //const [connected, setConnected] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -24,7 +26,7 @@ function App() {
   return (
     <div className="dark">
       <SocketContext.Provider value={socket}>
-        <Router>
+         <Router>
           <Routes>
             <Route
               exact

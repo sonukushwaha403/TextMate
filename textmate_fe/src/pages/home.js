@@ -10,6 +10,8 @@ import {
   getConversations,
   //updateMessagesAndConversations,
 } from "../features/chatSlice";
+import SocketContext from "../context/SocketContext";
+import { Socket } from "socket.io-client";
 // import Call from "../components/Chat/call/Call";
 // import {
 //   getConversationId,
@@ -17,13 +19,16 @@ import {
 //   getConversationPicture,
 // } from "../utils/chat";
 
-export default function Home() {
-    const dispatch = useDispatch();
+  function Home({socket}) {
+     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.user);
     const { activeConversation } = useSelector((state) => state.chat);
     console.log("activeConversation",activeConversation);
 //   const [onlineUsers, setOnlineUsers] = useState([]);
-
+//join user into socket io
+useEffect(()=>{
+socket.emit('join',user._id);
+},[user]);
     //get conversations
     useEffect(() => {
         if(user?.token){
@@ -45,6 +50,13 @@ export default function Home() {
     </div>
   );
 }
+
+const HomeWithSocket=(props)=>(
+  <SocketContext.Consumer>
+    {(socket)=><Home{...props} socket={socket}/>}
+  </SocketContext.Consumer>
+);
+export default HomeWithSocket;
 
 // const callData = {
 //   socketId: "",
