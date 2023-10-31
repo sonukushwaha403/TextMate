@@ -1,11 +1,12 @@
-import ChatHeader from "../header/ChatHeader";
-import ChatMessages from "../messages/ChatMessages"; 
+import ChatHeader from "./header/ChatHeader";
+import ChatMessages from "./messages/ChatMessages"; 
 import { useDispatch, useSelector } from "react-redux";
-import { getConversationMessages} from "../../../features/chatSlice";
+import { getConversationMessages} from "../../features/chatSlice";
 import { useEffect } from "react";
-import { ChatActions } from "../actions";
+import { ChatActions } from "./actions";
+import { checkOnlineStatus, getConversationId } from "../../utils/chat";
 
-export default function ChatContainer(){
+export default function ChatContainer({onlineUsers, typing}){
   const dispatch = useDispatch();
   const { activeConversation} = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
@@ -24,9 +25,9 @@ export default function ChatContainer(){
     {/*Container*/}
     <div>
       {/*Chat Header*/}
-      <ChatHeader />
+      <ChatHeader online={checkOnlineStatus(onlineUsers,user,activeConversation.users)} />
       {/*Chat messages*/}
-      <ChatMessages/>
+      <ChatMessages typing = {typing}/>
       {/*Chat actions*/}
       <ChatActions/>
     </div> 

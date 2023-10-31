@@ -1,39 +1,10 @@
 
-import { useSelector } from "react-redux";
-import { setActiveConversation } from "../../../features/chatSlice";
-import Conversation from "./Conversation";
-
-export default function Conversations() {
-  const { conversations,activeConversation } = useSelector(
-    (state) => state.chat
-  );
-  const { user } = useSelector((state) => state.user);
-  return (
-    <div className="convos scrollbar">
-      <ul>
-        {conversations &&
-          conversations
-          .filter((c)=>c.latestMessage || c._id===activeConversation._id)
-          .map((convo) => (
-    
-                <Conversation
-                  convo={convo}
-                  key={convo._id}
-                />
-              )
-            )}
-      </ul>
-    </div>
-  );
-}
-
-
 // import { useSelector } from "react-redux";
-// import { checkOnlineStatus, getConversationId } from "../../../utils/chat";
+// import { setActiveConversation } from "../../../features/chatSlice";
 // import Conversation from "./Conversation";
 
-// export default function Conversations({ onlineUsers, typing }) {
-//   const { conversations, activeConversation } = useSelector(
+// export default function Conversations() {
+//   const { conversations,activeConversation } = useSelector(
 //     (state) => state.chat
 //   );
 //   const { user } = useSelector((state) => state.user);
@@ -42,24 +13,53 @@ export default function Conversations() {
 //       <ul>
 //         {conversations &&
 //           conversations
-//             .filter(
-//               (c) =>
-//                 c.latestMessage ||
-//                 c._id === activeConversation._id ||
-//                 c.isGroup == true
-//             )
-//             .map((convo) => {
-//               let check = checkOnlineStatus(onlineUsers, user, convo.users);
-//               return (
+//           .filter((c)=>c.latestMessage || c._id===activeConversation._id)
+//           .map((convo) => (
+    
 //                 <Conversation
 //                   convo={convo}
 //                   key={convo._id}
-//                   online={!convo.isGroup && check ? true : false}
-//                   typing={typing}
 //                 />
-//               );
-//             })}
+//               )
+//             )}
 //       </ul>
 //     </div>
 //   );
 // }
+
+
+import { useSelector } from "react-redux";
+import { checkOnlineStatus, getConversationId } from "../../../utils/chat";
+import Conversation from "./Conversation";
+
+export default function Conversations({ onlineUsers, typing }) {
+  const { conversations, activeConversation } = useSelector(
+    (state) => state.chat
+  );
+  const { user } = useSelector((state) => state.user);
+  return (
+    <div className="convos scrollbar">
+      <ul>
+        {conversations &&
+          conversations
+            .filter(
+              (c) =>
+                c.latestMessage ||
+                c._id === activeConversation._id ||
+                c.isGroup == true
+            )
+            .map((convo) => {
+              let check = checkOnlineStatus(onlineUsers,user,convo.users);
+              return (
+                <Conversation
+                  convo={convo}
+                  key={convo._id}
+                  online={!convo.isGroup && check ? true : false}
+                  typing={typing}
+                />
+              );
+            })}
+      </ul>
+    </div>
+  );
+}

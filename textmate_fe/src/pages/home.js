@@ -4,14 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 // import { ChatContainer, TextMateHome } from "../components/Chat";
 import { ChatContainer, TextMateHome } from "../components/Chat/welcome";
 import { Sidebar } from "../components/sidebar";
-import { useEffect } from "react";
-// import SocketContext from "../context/SocketContext";
+import { useEffect,useState } from "react";
+import { Socket } from "socket.io-client";
+import SocketContext from "../context/SocketContext";
 import {
   getConversations,
-  //updateMessagesAndConversations,
+  updateMessagesAndConversations,
 } from "../features/chatSlice";
-import SocketContext from "../context/SocketContext";
-import { Socket } from "socket.io-client";
+
+
 // import Call from "../components/Chat/call/Call";
 // import {
 //   getConversationId,
@@ -24,10 +25,19 @@ import { Socket } from "socket.io-client";
     const { user } = useSelector((state) => state.user);
     const { activeConversation } = useSelector((state) => state.chat);
     console.log("activeConversation",activeConversation);
-//   const [onlineUsers, setOnlineUsers] = useState([]);
+   const [onlineUsers, setOnlineUsers] = useState([]);
+   //typing
+   const [typing, setTyping] = useState(false);
 //join user into socket io
 useEffect(()=>{
 socket.emit('join',user._id);
+
+//get online users
+socket.on("get-online-users",(users)=>{
+  // console.log("online users",users);
+  setOnlineUsers(users);
+});
+
 },[user]);
     //get conversations
     useEffect(() => {
@@ -36,14 +46,30 @@ socket.emit('join',user._id);
         }
     },[user]);
 
+    useEffect(() => {
+          //listening to receiving a message
+          socket.on("receive message", (message) => {
+            dispatch(updateMessagesAndConversations(message));
+          });
+          //listening when a user is typing
+          socket.on("typing", (conversation) => setTyping(conversation));
+          socket.on("stop typing", () => setTyping(false));
+        }, []);
+
   return (
     <div className=" h-screen bg-dark_bg_1 flex items-center justify-center overflow-hidden">
       {/*container*/}
       <div className="container  h-screen pt-[19px] flex">
         {/*Sidebar*/}
-        <Sidebar />
+        <Sidebar  onlineUsers={onlineUsers} typing = {typing}/>
           {
-            activeConversation._id?<ChatContainer/>:
+            activeConversation._id ? (
+                          <ChatContainer
+                            onlineUsers={onlineUsers}
+                           // callUser={callUser}
+                           typing={typing}
+                          />
+                        ) : 
             <TextMateHome/>
           }
       </div>

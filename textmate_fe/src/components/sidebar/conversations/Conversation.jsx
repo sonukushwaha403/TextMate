@@ -8,7 +8,7 @@ import { capitalize } from "../../../utils/string";
 import SocketContext from "../../../context/SocketContext";
 
 
- function Conversation({ convo,socket }) {
+ function Conversation({ convo,socket,online, typing }) {
   const createdAt = convo?.latestMessage?.createdAt;  //instead of writing convo.latestMessage.createdAt, we have created a variable createdAt
   const dispatch = useDispatch();
   const {user}=useSelector((state)=>state.user);
@@ -35,7 +35,11 @@ import SocketContext from "../../../context/SocketContext";
         {/*Left*/}
         <div className="flex items-center gap-x-3">
           {/*Conversation user picture*/}
-          <div className="relative min-w-[50px] h-[50px] rounded-full ">
+          <div
+            className={`relative min-w-[50px] max-w-[50px] h-[50px] rounded-full overflow-hidden ${
+              online ? "online" : ""
+            }`}
+          >
             <img
               src={getConversationPicture(user,convo.users)}
               alt="picture"
@@ -52,9 +56,13 @@ import SocketContext from "../../../context/SocketContext";
             <div>
               <div className="flex items-center gap-x-1 dark:text-dark_text_2">
                 <div className="flex-1 items-center gap-x-1 dark:text-dark_text_2">
+                {typing === convo._id ? (
+                    <p className="text-blue_1">Typing...</p>
+                  ) : (
                   <p>{convo.latestMessage?.message.length> 25 ? `${convo.latestMessage?.message.substring(0,25)}...` 
                   : convo.latestMessage?.message}
                   </p>
+                  )}
                 </div>
               </div>
             </div>
