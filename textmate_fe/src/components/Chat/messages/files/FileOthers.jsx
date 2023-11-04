@@ -1,4 +1,5 @@
 import DownloadIcon from "../../../../svg/Download";
+
 export default function FileOthers({ file, type, me }) {
   return (
     <div className="bg-green_4 p-2 rounded-lg">
@@ -21,11 +22,11 @@ export default function FileOthers({ file, type, me }) {
           </div>
         </div>
         {/*Download button*/}
-        {!me && (
+        {
           <a href={file.secure_url} target="_blank" download>
             <DownloadIcon />
           </a>
-        )}
+        }
       </div>
     </div>
   );

@@ -52,4 +52,4 @@ export default function ChatMessages({ typing }) {
       </div>
     </div>
   );
-}
+};
